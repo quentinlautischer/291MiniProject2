@@ -50,6 +50,8 @@ class phase1:
 	
 
 	def printPterms(self, lines):
+        i = 2
+        
 
 	def printRterms(self, lines):
 

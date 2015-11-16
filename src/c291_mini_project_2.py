@@ -43,7 +43,7 @@ for line in f:
 output = open("pythonoutput.txt", "a")
 
 for line in linesout:
-	output.write(line);
+	output.write(line)
 
 
 			

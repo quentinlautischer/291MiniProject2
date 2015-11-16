@@ -6,13 +6,10 @@ from bsddb3 import db
 class BDB:
 	database = None
 	split_sign = ";"
-	dbType = db.DB_UNKNOWN
-
-	def __init__(self, name, dbType):
-		self.dbType = db.DB_BTREE if dbType == "B+" else self.dbType = db.DB_HASH
+	def __init__(self, name):
 		self.database = db.DB()
 		#self.database.set_flags(db.DB_DUP)
-		self.database.open(name, None, self.dbType, db.DB_CREATE)
+		self.database.open(name, None, db.DB_BTREE, db.DB_CREATE)
 
 	def get(self,key):
 		if self.database.has_key(key) == True:
@@ -29,8 +26,6 @@ class BDB:
 		else:
 			val = str(self.database[key],'ascii')
 			self.database[key] = val + self.split_sign + value
-
-	
 			
 
 ####################
