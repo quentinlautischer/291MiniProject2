@@ -4,6 +4,16 @@ from rgxHandler import *
 rgx = rgxHandler()
 f = open("sample10.txt")
 
+p1 = phase1()
+p2 = phase2()
+p3 = phase3()
+
+
+p1.start()
+p2.start()
+p3.start()
+
+
 linesout = []
 
 i = 0
