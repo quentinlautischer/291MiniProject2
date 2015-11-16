@@ -2,6 +2,7 @@ import re
 
 class rgxHandler:
 
+    # Taken from https://www.safaribooksonline.com/library/view/python-cookbook-2nd/0596007973/ch01s19.html
     getrids = dict([("product/productId: ",''), ("product/title: ",''), ("product/price: ",''), ("review/userId: ",''), ("review/profileName: ",''), ("review/helpfulness: ",''), ("review/score: ",''), ("review/time: ",''), ("review/summary: ",''), ("review/text: ",'')])
     replace = {"\\":"\\\\", '"': "&quot;" }
 
