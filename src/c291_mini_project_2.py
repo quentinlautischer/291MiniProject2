@@ -2,7 +2,7 @@ from b_bsddb3 import *
 from rgxHandler import * 
 
 rgx = rgxHandler()
-f = open("sample10.text")
+f = open("sample10.txt")
 
 p1 = phase1()
 p2 = phase2()
@@ -14,12 +14,7 @@ p2.start()
 p3.start()
 
 
-#getrids = ["product/productId: ", "product/title: ", "product/price: ", "review/userId: ", "review/profileName: ", "review/helpfulness: ", "review/score:",
-#	"review/time: ", "review/summary:", "review/text: "]
 linesout = []
-
-
-
 
 i = 0
 k = 0
@@ -45,7 +40,7 @@ for line in f:
 	
 
 	
-output = open("pythonoutput.text", "a")
+output = open("pythonoutput.txt", "a")
 
 for line in linesout:
 	output.write(line);
