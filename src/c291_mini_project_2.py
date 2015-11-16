@@ -4,6 +4,16 @@ from rgxHandler import *
 rgx = rgxHandler()
 f = open("sample10.text")
 
+p1 = phase1()
+p2 = phase2()
+p3 = phase3()
+
+
+p1.start()
+p2.start()
+p3.start()
+
+
 #getrids = ["product/productId: ", "product/title: ", "product/price: ", "review/userId: ", "review/profileName: ", "review/helpfulness: ", "review/score:",
 #	"review/time: ", "review/summary:", "review/text: "]
 linesout = []
