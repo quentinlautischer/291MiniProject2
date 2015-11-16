@@ -1,7 +1,7 @@
-import b_bsddb3
-import rgxHandler
+from b_bsddb3 import *
+from rgxHandler import * 
 
-rgx = rgxHandler
+rgx = rgxHandler()
 f = open("sample10.text")
 
 #getrids = ["product/productId: ", "product/title: ", "product/price: ", "review/userId: ", "review/profileName: ", "review/helpfulness: ", "review/score:",
