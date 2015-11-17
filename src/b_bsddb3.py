@@ -4,34 +4,41 @@ from bsddb3 import db
 # Updated by Kriti
 # Command to run: python b_bsddb3.py
 class BDB:
-	database = None
-	split_sign = ";"
-	dbType = db.DB_UNKNOWN
+    database = None
+    split_sign = ";"
+    dbType = db.DB_UNKNOWN
 
-	def __init__(self, name, dbType):
-		self.dbType = db.DB_BTREE if dbType == "B+" else self.dbType = db.DB_HASH
-		self.database = db.DB()
-		#self.database.set_flags(db.DB_DUP)
-		self.database.open(name, None, self.dbType, db.DB_CREATE)
+    def __init__(self, name, dbType):
+        if dbType == 'B+':
+            self.dbType = db.DB_BTREE  
+        else:
+            self.dbType = db.DB_HASH
 
-	def get(self,key):
-		if self.database.has_key(key) == True:
-			val = self.database[key]
-			in_str = str(val,'ascii')
-			#print(in_str)
-			return in_str.split(self.split_sign)
-		else:
-			return  []
+        self.database = db.DB()
+        #self.database.set_flags(db.DB_DUP)
+        self.database.open(name, None, self.dbType, db.DB_CREATE)
 
-	def insert(self,key, value):
-		if self.database.has_key(key)== False:
-			self.database[key] = value
-		else:
-			val = str(self.database[key],'ascii')
-			self.database[key] = val + self.split_sign + value
+    def get(self,key):
+        if self.database.has_key(key) == True:
+            val = self.database[key]
+            in_str = str(val,'ascii')
+            #print(in_str)
+            return in_str.split(self.split_sign)
+        else:
+            return  []
 
-	
-			
+    def insert(self,key, value):
+        if self.database.has_key(key)== False:
+            self.database[key] = value
+        else:
+            val = str(self.database[key],'ascii')
+            self.database[key] = val + self.split_sign + value
+
+    def close(self):
+            self.database.close()
+    
+    def remove(self, name):
+            self.database.remove(name)      
 
 ####################
 #DATABASE = 'f112.db'
