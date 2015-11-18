@@ -65,7 +65,7 @@ class Phase1:
 				pass
 			
 			i += 1
-		reviews.write(review) #Write review
+		reviews.write(review) #Write review WE NEED TO DISCUSS
 
 		self.closeFiles([reviews, outputp, outputr, outputs])
 
@@ -75,7 +75,7 @@ class Phase1:
 		for word in words:
 			#outfile.write(word + ',' + str(k) + '\n')
 			if(k == (len(self.lines)/11) and word == words[-1] and (i == 10 or i == 2)):
-				outfile.write(word + ',' + str(k))
+				outfile.write(word + ',' + str(k))#NEED A NEW LINE? ? ?? ? ?
 			else:
 				outfile.write(word + ',' + str(k) + '\n') #Also Write the term we want
 

@@ -23,13 +23,13 @@ import re
 class Phase3:
 
     def __init__(self):
-    	pass
+        pass
 
         
 
     def start(self):
         print("############# REVIEW LOOKUP SYSTEM #############")
-        query = raw_input("Please provide a Query: ")
+        query = input("Please provide a Query: ")
         print(self.queryParser(query))
         #DO WORK
         print("Here is the Result")
@@ -41,21 +41,43 @@ class Phase3:
         Parser
         >>> p3  = Phase3()
                 
-        >>> p3.queryParser("p:camera")
+        >>> p3.queryParser("P:caMeRa")
         ('Selector', 'p', 'camera')
 
-        >>> p3.queryParser("r:great")
+        >>> p3.queryParser("r:grEaT")
         ('Selector', 'r', 'great')
 
-        >>> p3.queryParser("camera")
+        >>> p3.queryParser("cAmeRa")
         ('FullSearch', 'camera')
 
+        >>> p3.queryParser("cam%")
+        ('FullWildSearch', 'cam')
+
+        >>> p3.queryParser("r:great cam%")
+
+        >>> p3.queryParser("rscore > 4")
+
+        >>> p3.queryParser("camera rscore < 3")
+
+        # pprice < 60 camera 
+
+        # camera rdate > 2007/06/20 
+
+        # camera rdate > 2007/06/20 pprice > 20 pprice < 60 
+
         """
-        selector = re.compile("r:|p:")
+        query = query.strip().lower()
+        selector = re.compile(r"r:|p:")
+        wild = re.compile(r"%")
         # p.match(query)
         if(selector.match(query)):
-            word = re.compile(":[a-z]*")
-            return ("Selector", query[0], selector.match(query).group(0)[1::])
+            word = re.compile(r":[a-z]*")
+            return ("Selector", query[0], word.search(query).group(0)[1::])
+        elif (wild.search(query)):
+            return ("FullWildSearch", query.strip("%"))
+
+        else:
+            return ("FullSearch", query)
         return None
 
 
