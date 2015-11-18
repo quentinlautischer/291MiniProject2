@@ -9,7 +9,7 @@ class Phase2:
     rterms = ("rterms.txt", "rt.idx")
     scores = ("scores.txt", "sc.idx")
     #sortFiles = [pterms, rterms, scores]
-    sortFiles = [reviews, pterms, rterms, scores]
+    sortFiles = [rterms]
 
     reviewsDB = None
     ptermsDB = None
@@ -20,22 +20,22 @@ class Phase2:
         print("DB Inits")
         b = db.DB()
         try:
-            subprocess.run("rm -rf rw.idx", shell=True, check=True)
+            subprocess.check_output("rm -rf rw.idx", stderr=subprocess.STDOUT, shell=True)
             b.remove("reviews.db")
         except:
             pass
         try:
-            subprocess.run("rm -rf pt.idx", shell=True, check=True)
+            subprocess.check_output("rm -rf pt.idx", stderr=subprocess.STDOUT, shell=True)
             b.remove("pterms.db")
         except:
             pass    
         try:
-            subprocess.run("rm -rf rt.idx", shell=True, check=True)   
+            subprocess.check_output("rm -rf rt.idx", stderr=subprocess.STDOUT, shell=True)   
             b.remove("rterms.db")
         except:
             pass
         try:
-            subprocess.run("rm -rf sc.idx", shell=True, check=True)
+            subprocess.check_output("rm -rf sc.idx", stderr=subprocess.STDOUT, shell=True)
             b.remove("scores.db")
             
         except:
@@ -49,9 +49,9 @@ class Phase2:
     def start(self):
         print("#Creating Indexes")
         for filename, idx in self.sortFiles:
-            subprocess.run("sort -u -o " + filename + " " + filename, shell=True, check=True)
-            subprocess.run("db_load  -c duplicates=1 -T -t btree -f " + filename + " " + idx, shell=True, check=True)
-
+            subprocess.check_output("sort -u -o " + filename + " " + filename, stderr=subprocess.STDOUT, shell=True)
+            subprocess.check_output("db_load  -c duplicates=1 -T -t btree -f " + filename + " " + idx, stderr=subprocess.STDOUT, shell=True)
+            
 
         print("Closing DB's")
 
