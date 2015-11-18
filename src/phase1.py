@@ -47,18 +47,17 @@ class Phase1:
 		for line in self.lines:
 			review += line
 			if i == 2:
-				self.writeToFile3(line, outputp, k, i) #Write P terms
+				self.writeToFile3(line, outputp, k) #Write P terms
 			elif i == 7:
 				if(k != (len(self.lines)/11)):
 					outputs.write(line + str(k) + '\n') #Writing scores
 				else:
 					outputs.write(line + str(k))
 			elif i == 9:
-				self.writeToFile3(line, outputr, k, i) #Writing R terms
+				self.writeToFile3(line, outputr, k) #Writing R terms
 			elif i == 10:
-				self.writeToFile3(line, outputr, k, i) #Writing R terms
-				if(k != (len(self.lines)/11)):
-					review += '\n'
+				self.writeToFile3(line, outputr, k) #Writing R terms
+				review += '\n'
 				i = -1
 				k += 1
 			else:
@@ -69,15 +68,11 @@ class Phase1:
 
 		self.closeFiles([reviews, outputp, outputr, outputs])
 
-	def writeToFile3(self, line, outfile, k, i):
+	def writeToFile3(self, line, outfile, k):
 		rgx = rgxHandler()
 		words = rgx.find3OrMore(line)
 		for word in words:
-			#outfile.write(word + ',' + str(k) + '\n')
-			if(k == (len(self.lines)/11) and word == words[-1] and (i == 10 or i == 2)):
-				outfile.write(word + ',' + str(k))
-			else:
-				outfile.write(word + ',' + str(k) + '\n') #Also Write the term we want
+			outfile.write(word + ',' + str(k) + '\n') #Also Write the term we want
 
 	def OpenFiles(self):
 		outputp = open("pterms.txt", "a") #Open Files
