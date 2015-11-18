@@ -25,7 +25,8 @@ class BDB:
 		else:
 			val = str(self.database[key],'ascii')
 			self.database[key] = val + self.split_sign + value
-			
+	
+	
 
 ####################
 DATABASE = 'f112.db'
