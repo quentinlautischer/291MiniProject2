@@ -25,9 +25,14 @@ class Phase3:
     	pass
 
     def start(self):
-    	query = input("Please provide a Query: ")
+    	query = raw_input("Please provide a Query: ")
     	#DO WORK
     	print("Here is the Result")
+
+
+
+
+
 
 if __name__ == "__main__":
     p3 = Phase3()
