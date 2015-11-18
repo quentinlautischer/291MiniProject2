@@ -5,7 +5,6 @@ class phase1:
 	def __init__(self, filename):
 		self.filename = filename
 		self.lines = self.parseFile()
-		print(len(self.lines))
 
 	def parseFile(self):
 		rgx = rgxHandler()
@@ -68,6 +67,8 @@ class phase1:
 			i += 1
 		reviews.write(review) #Write review
 
+		self.closeFiles([reviews, outputp, outputr, outputs])
+
 	def writeToFile3(self, line, outfile, k, i):
 		rgx = rgxHandler()
 		words = rgx.find3OrMore(line)
@@ -91,6 +92,10 @@ class phase1:
 		self.deleteContent("rterms.txt")
 		self.deleteContent("scores.txt")
 		self.deleteContent("reviews.txt")
+
+	def closeFiles(self, files):
+		for openfiles in files:
+			openfiles.close()
 
 
 	def deleteContent(self, fName):
