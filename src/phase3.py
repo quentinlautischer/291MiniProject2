@@ -18,22 +18,49 @@
 
 # 10. camera rdate > 2007/06/20 pprice > 20 pprice < 60 Finally the last query returns the same set of results as in the 9th query except the product price must be greater than 20 and less than 60.
 
+import re
 
 class Phase3:
 
     def __init__(self):
     	pass
 
+        
+
     def start(self):
-    	query = raw_input("Please provide a Query: ")
-    	#DO WORK
-    	print("Here is the Result")
+        print("############# REVIEW LOOKUP SYSTEM #############")
+        query = raw_input("Please provide a Query: ")
+        print(self.queryParser(query))
+        #DO WORK
+        print("Here is the Result")
 
 
 
+    def queryParser(self, query):
+        """
+        Parser
+        >>> p3  = Phase3()
+                
+        >>> p3.queryParser("p:camera")
+        ('Selector', 'p', 'camera')
 
+        >>> p3.queryParser("r:great")
+        ('Selector', 'r', 'great')
+
+        >>> p3.queryParser("camera")
+        ('FullSearch', 'camera')
+
+        """
+        selector = re.compile("r:|p:")
+        # p.match(query)
+        if(selector.match(query)):
+            word = re.compile(":[a-z]*")
+            return ("Selector", query[0], selector.match(query).group(0)[1::])
+        return None
 
 
 if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
     p3 = Phase3()
     p3.start()
