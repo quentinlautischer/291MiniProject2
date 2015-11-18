@@ -16,11 +16,14 @@ class rgxHandler:
         return rx.sub(one_xlat, text)
 
     def line_rgx(self, text):
-        rtnline = self.multiple_replace(text.strip('\n'), self.getrids)
-        rtnline = self.multiple_replace(rtnline, self.replace)
-        return rtnline
+        text = text.strip('\n')
+        text = self.multiple_replace(text, self.getrids)
+        text = self.multiple_replace(text, self.replace)
+        return text
 
     def find3OrMore(self, line):
+        #line = re.sub("&quot;", ' ', line)
+        line = re.sub(r'([^\s\w]|_)+', ' ', line)
         words = line.split()
         rtnwords = []
 
