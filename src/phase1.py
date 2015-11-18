@@ -1,6 +1,6 @@
 from rgxHandler import *
 
-class phase1:
+class Phase1:
 
 	def __init__(self, filename):
 		self.filename = filename
@@ -96,3 +96,8 @@ class phase1:
 	def deleteContent(self, fName):
 		f = open(fName, "w")
 		f.close()
+
+
+if __name__ == "__main__":
+	p1 = Phase1("sample10.txt")
+	p1.start()

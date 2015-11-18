@@ -8,8 +8,7 @@ class Phase2:
     pterms = ("pterms.txt", "pt.idx")
     rterms = ("rterms.txt", "rt.idx")
     scores = ("scores.txt", "sc.idx")
-    #sortFiles = [pterms, rterms, scores]
-    sortFiles = [rterms]
+    sortFiles = [pterms, rterms, scores]
 
     reviewsDB = None
     ptermsDB = None
@@ -21,25 +20,24 @@ class Phase2:
         b = db.DB()
         try:
             subprocess.check_output("rm -rf rw.idx", stderr=subprocess.STDOUT, shell=True)
-            b.remove("reviews.db")
+            # b.remove("reviews.db")
         except:
-            pass
+            print("Issue cleaning up. DONT BE A FOOL.")
         try:
             subprocess.check_output("rm -rf pt.idx", stderr=subprocess.STDOUT, shell=True)
-            b.remove("pterms.db")
+            # b.remove("pterms.db")
         except:
-            pass    
+            print("Issue cleaning up. DONT BE A FOOL.")    
         try:
             subprocess.check_output("rm -rf rt.idx", stderr=subprocess.STDOUT, shell=True)   
-            b.remove("rterms.db")
+            # b.remove("rterms.db")
         except:
-            pass
+            print("Issue cleaning up. DONT BE A FOOL.")
         try:
             subprocess.check_output("rm -rf sc.idx", stderr=subprocess.STDOUT, shell=True)
-            b.remove("scores.db")
-            
+            # b.remove("scores.db")
         except:
-            pass
+            print("Issue cleaning up. DONT BE A FOOL.")
 
         self.reviewsDB = BDB('reviews.db', 'H') 
         self.ptermsDB = BDB('pterms.db', 'B+')
@@ -50,8 +48,9 @@ class Phase2:
         print("#Creating Indexes")
         for filename, idx in self.sortFiles:
             subprocess.check_output("sort -u -o " + filename + " " + filename, stderr=subprocess.STDOUT, shell=True)
-            subprocess.check_output("db_load  -c duplicates=1 -T -t btree -f " + filename + " " + idx, stderr=subprocess.STDOUT, shell=True)
-            
+            subprocess.check_output("db_load -c duplicates=1 -T -t btree -f " + filename + " " + idx, stderr=subprocess.STDOUT, shell=True)
+        
+        subprocess.check_output("db_load -c duplicates=1 -T -t hash -f " + self.reviews[0] + " " + self.reviews[1], stderr=subprocess.STDOUT, shell=True)
 
         print("Closing DB's")
 
