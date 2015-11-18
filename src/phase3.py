@@ -19,7 +19,7 @@
 # 10. camera rdate > 2007/06/20 pprice > 20 pprice < 60 Finally the last query returns the same set of results as in the 9th query except the product price must be greater than 20 and less than 60.
 
 import re
-
+import time
 class Phase3:
 
     def __init__(self):
@@ -38,47 +38,118 @@ class Phase3:
 
     def queryParser(self, query):
         """
-        Parser
+        Parser returns tuples containing 4 lists containng tuples.
+        ([words], [wilds], [selectors], [comparators])
+
+        word = (searchTerm)
+        wild = (searchTerm)
+        selector = (selector, searchTerm)
+        comparator = (comparator, operator, value)
+
+
         >>> p3  = Phase3()
-                
-        >>> p3.queryParser("P:caMeRa")
-        ('Selector', 'p', 'camera')
+        
+        >>> p3.queryParser("")
+        ([], [], [], [])
 
-        >>> p3.queryParser("r:grEaT")
-        ('Selector', 'r', 'great')
+        >>> result = p3.queryParser("P:caMeRa")
+        >>> result[2]
+        [('p', 'camera')]
 
-        >>> p3.queryParser("cAmeRa")
-        ('FullSearch', 'camera')
+        >>> result = p3.queryParser("r:grEaT")
+        >>> result[2]
+        [('r', 'great')]
 
-        >>> p3.queryParser("cam%")
-        ('FullWildSearch', 'cam')
+        >>> result =p3.queryParser("cAmeRa")
+        >>> result[0]
+        ['camera']
 
-        >>> p3.queryParser("r:great cam%")
+        >>> result = p3.queryParser("cam%")
+        >>> result[1]
+        ['cam']
 
-        >>> p3.queryParser("rscore > 4")
+        >>> result = p3.queryParser("r:great cam%")
+        >>> result[1]
+        ['cam']
+        >>> result[2]
+        [('r', 'great')]
 
-        >>> p3.queryParser("camera rscore < 3")
+        >>> result = p3.queryParser("rscore > 4")
+        >>> result[3] == [('rscore', '>', '4')]
+        True
 
-        # pprice < 60 camera 
+        >>> result = p3.queryParser("camera rscore < 3")
+        >>> result[0]
+        ['camera']
+        >>> result[3] == [('rscore', '<', '3')]        
+        True
 
-        # camera rdate > 2007/06/20 
+        >>> result = p3.queryParser("pprice < 60 camera")
+        >>> result[0]
+        ['camera']
+        >>> result[3] == [('pprice', '<', '60')]        
+        True
 
-        # camera rdate > 2007/06/20 pprice > 20 pprice < 60 
 
-        """
-        query = query.strip().lower()
-        selector = re.compile(r"r:|p:")
-        wild = re.compile(r"%")
-        # p.match(query)
-        if(selector.match(query)):
-            word = re.compile(r":[a-z]*")
-            return ("Selector", query[0], word.search(query).group(0)[1::])
-        elif (wild.search(query)):
-            return ("FullWildSearch", query.strip("%"))
+        >>> result = p3.queryParser("camera rdate > 2007/06/20")
+        >>> result[0]
+        ['camera']
+        >>> result[3] == [('rdate', '>', '2007/06/20')]        
+        True
 
-        else:
-            return ("FullSearch", query)
-        return None
+        >>> result = p3.queryParser("camera rdate > 2007/06/20 pprice > 20 pprice < 60")
+        >>> result[0]
+        ['camera']
+        >>> result[3] == [('rdate', '>', '2007/06/20'), ('pprice', '>', '20'), ('pprice', '<', '60')]        
+        True
+
+        """  
+        query = query.strip().lower().rstrip('\r\n')
+
+        searchTerms = [] #(searchTerm)
+        wildCardTerms = [] #(searchTerm)
+        selectors = [] #(selector, searchTerm)
+        comparators = [] #(comparator, operator, value)
+
+        selector = re.compile(r"(r:|p:)[a-z]*")
+        wild = re.compile(r"[a-z]*%")
+        comparator = re.compile(r"\w*\s(<|>)\s[\w/]*")
+        word = re.compile(r"[a-z]+")
+
+        while(query != ""):
+            # time.sleep(3)
+            # print("looping query: " + query)
+            query.strip().rstrip('\r\n')
+            if(comparator.search(query)):
+                found = comparator.search(query).group(0)
+                query = query.replace(found, "")
+                if(">" in found):
+                    comparators.append( (found.split(">")[0].strip(),">",found.split(">")[1].strip()) )
+                else:
+                    comparators.append( (found.split("<")[0].strip(),"<",found.split("<")[1].strip()) )
+                continue
+            elif (selector.match(query)):
+                # print("Selector found")
+                found = selector.search(query).group(0)
+                query = query.replace(found, "")
+                selectors.append((found.split(":")[0],found.split(":")[1]))
+                continue
+            elif (wild.search(query)):
+                # print("wild found")
+                found = wild.search(query).group(0)
+                query = query.replace(found, "")
+                wildCardTerms.append(found.strip("%"))
+                continue
+            elif (word.search(query)):
+                # print("Word found")
+                found = word.search(query).group(0)
+                query = query.replace(found, "")
+                searchTerms.append(found)
+                continue
+            else:
+                break
+
+        return (searchTerms,wildCardTerms,selectors,comparators)
 
 
 if __name__ == "__main__":
