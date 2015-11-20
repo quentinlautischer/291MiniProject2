@@ -49,11 +49,11 @@ class Phase2:
         for filename, idx in self.sortFiles:
             subprocess.check_output("sort -u -o " + filename + " " + filename, stderr=subprocess.STDOUT, shell=True)
             
-            self.phase2_5(filename)
+            #self.phase2_5(filename)
 
             subprocess.check_output("db_load -c duplicates=1 -T -t btree -f " + filename + " " + idx, stderr=subprocess.STDOUT, shell=True)
         
-        self.phase2_5(self.reviews[0])
+        #self.phase2_5(self.reviews[0])
         subprocess.check_output("db_load -c duplicates=1 -T -t hash -f " + self.reviews[0] + " " + self.reviews[1], stderr=subprocess.STDOUT, shell=True)
 
         print("Closing DB's")

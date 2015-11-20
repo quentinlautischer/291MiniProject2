@@ -1,0 +1,37 @@
+from rgxHandler import *
+#from TimeWrapper import timed
+
+class Phase2_5:
+
+    def phase2_5(filename):
+        lines = parseFile(filename)
+        overWrite(filename, lines)
+    
+    def parseFile(filename):
+        f = open(filename)
+        linesout = []
+
+        for line in f:
+            lineed = line.split(',', 1)
+            linesout.append(lineed[0] + '\n')
+            linesout.append(lineed[1])
+        return linesout
+
+    def overWrite(self):
+        f = open(self.filename, 'w')
+        for line in self.lines:
+            f.write(line)
+
+    def start(self):
+        self.overWrite()
+    
+
+if __name__ == "__main__":
+    p2_5 = Phase2_5("pterms.txt")
+    p2_5.start()
+    p2_5 = Phase2_5("rterms.txt")
+    p2_5.start()
+    p2_5 = Phase2_5("scores.txt")
+    p2_5.start()
+    p2_5 = Phase2_5("reviews.txt")
+    p2_5.start()

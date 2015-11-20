@@ -96,5 +96,5 @@ class Phase1:
 
 
 if __name__ == "__main__":
-    p1 = Phase1("1000review.txt")
+    p1 = Phase1("sample10.txt")
     p1.start()

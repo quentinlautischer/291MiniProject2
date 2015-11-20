@@ -30,12 +30,7 @@ class Phase3:
 
     def start(self):
         datab = BDB('pterms.db', 'B+')
-        #print(datab.get(b"art"))
-        datab.getAll()
-        
-
-
-
+        print(datab.get(b"art"))
         print("############# REVIEW LOOKUP SYSTEM #############")
         query = input("Please provide a Query: ")
         print(self.queryParser(query))
