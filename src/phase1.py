@@ -34,6 +34,8 @@ class Phase1:
         return linesout
     
     def start(self):
+        print("####### RUNNING PHASE 1 PARSING FILES #######")
+        print("")
         self.createFiles()
 
     def createFiles(self):
@@ -96,5 +98,5 @@ class Phase1:
 
 
 if __name__ == "__main__":
-    p1 = Phase1("reviews.txt")
+    p1 = Phase1("sample10.txt")
     p1.start()

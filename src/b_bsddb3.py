@@ -34,6 +34,14 @@ class BDB:
             val = str(self.database[key],'ascii')
             self.database[key] = val + self.split_sign + value
 
+    def getAll(self): 
+        cur = self.database.cursor() 
+        iter = cur.first()
+        while iter:
+            print(iter)
+            iter = cur.next()
+        cur.close()
+
     def close(self):
             self.database.close()
     

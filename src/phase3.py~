@@ -21,77 +21,21 @@
 import re
 import time
 from b_bsddb3 import *
-from IndexDB import *
 class Phase3:
-    reviewsDB = None
-    ptermsDB = None
-    rtermsDB = None
-    scoresDB = None
 
     def __init__(self):
-        self.reviewsDB = IndexDB('rw.idx') 
-        self.ptermsDB = IndexDB('pt.idx')
-        self.rtermsDB = IndexDB('rt.idx')
-        self.scoresDB = IndexDB('sc.idx')
+        pass
+
+        
 
     def start(self):
-        print("#############    RUNNING PHASE 3   #############")
+        datab = BDB('pterms.db', 'B+')
+        print(datab.get(b"art"))
         print("############# REVIEW LOOKUP SYSTEM #############")
-        # while(1):
         query = input("Please provide a Query: ")
-        parsedQuery = self.queryParser(query) 
-        print(parsedQuery)
-        listOfReviews = self.getReviews(parsedQuery)
-        self.displayReviews(listOfReviews)
-
-        self.reviewsDB.close()
-        self.ptermsDB.close()
-        self.rtermsDB.close()
-        self.scoresDB.close()
-
-    def displayReviews(self, listOfReviews):
-        """
-
-        """
+        print(self.queryParser(query))
+        #DO WORK
         print("Here is the Result")
-        print("")
-
-
-    def getReviews(self, parsedQuery):
-        """
-        Using the parsedQuery data, intersects the conditional filters amongs the reviews.
-        Until a filtered list of results is generated. 
-        >>> p3  = Phase3()
-
-        >>> parsedQuery = ([], [], [], [])
-        >>> p3.getReviews(parsedQuery)
-        []
-
-        >>> parsedQuery = ([], [], [], [])
-        >>> p3.getReviews(parsedQuery)
-        []
-
-        """
-        list = []
-
-        #Select by selections, selector = (selector, searchTerm)
-        for entry in parsedQuery[2]:
-            pass
-
-        #Select by words, word = (searchTerm)
-        for entry in parsedQuery[0]:
-            pass
-
-        #Select by wilds, wild = (searchTerm) 
-        for entry in parsedQuery[1]:
-            pass
-
-        #Select by comparator, comparator = (comparator, operator, value)
-        for entry in parsedQuery[3]:
-            pass
-
-
-        return list
 
 
 
