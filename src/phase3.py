@@ -20,8 +20,8 @@
 
 import re
 import time
-from b_bsddb3 import *
 from IndexDB import *
+
 class Phase3:
     reviewsDB = None
     ptermsDB = None
@@ -38,7 +38,7 @@ class Phase3:
         print("#############    RUNNING PHASE 3   #############")
         print("############# REVIEW LOOKUP SYSTEM #############")
         # while(1):
-        query = input("Please provide a Query: ")
+        query = raw_input("Please provide a Query: ")
         parsedQuery = self.queryParser(query) 
         print(parsedQuery)
         listOfReviews = self.getReviews(parsedQuery)
@@ -51,7 +51,7 @@ class Phase3:
 
     def displayReviews(self, listOfReviews):
         """
-
+        
         """
         print("Here is the Result")
         print("")
@@ -76,8 +76,17 @@ class Phase3:
 
         #Select by selections, selector = (selector, searchTerm)
         for entry in parsedQuery[2]:
-            pass
+            print(entry)
+            selector = entry[0]
+            term = entry[1]
 
+
+            if(selector == "r"):
+                subList = self.rtermsDB.get(term)
+                print(subList)
+                for i in subList:
+                    list.append(i)
+            
         #Select by words, word = (searchTerm)
         for entry in parsedQuery[0]:
             pass
