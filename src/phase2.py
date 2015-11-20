@@ -41,7 +41,7 @@ class Phase2:
 
         self.reviewsDB = BDB('reviews.db', 'H') 
         self.ptermsDB = BDB('pterms.db', 'B+')
-        self.rtermsDB =  BDB('rterms.db', 'B+')
+        self.rtermsDB = BDB('rterms.db', 'B+')
         self.scoresDB = BDB('scores.db', 'B+')
 
     def start(self):

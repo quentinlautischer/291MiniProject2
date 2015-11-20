@@ -21,18 +21,75 @@
 import re
 import time
 class Phase3:
+    self.reviewsDB 
+    self.ptermsDB
+    self.rtermsDB
+    self.scoresDB
 
     def __init__(self):
-        pass
-
-        
+        self.reviewsDB = BDB('reviews.db', 'H') 
+        self.ptermsDB = BDB('pterms.db', 'B+')
+        self.rtermsDB = BDB('rterms.db', 'B+')
+        self.scoresDB = BDB('scores.db', 'B+')
 
     def start(self):
         print("############# REVIEW LOOKUP SYSTEM #############")
+        # while(1):
         query = input("Please provide a Query: ")
-        print(self.queryParser(query))
-        #DO WORK
+        parsedQuery = self.queryParser(query) 
+        print(parsedQuery)
+        listOfReviews = self.getReviews(parsedQuery)
+        self.displayReviews(listOfReviews)
+
+
+        self.reviewsDB.close()
+        self.ptermsDB.close()
+        self.rtermsDB.close()
+        self.scoresDB.close()
+
+    def displayReviews(self, listOfReviews):
+        """
+
+        """
         print("Here is the Result")
+        print("")
+
+
+    def getReviews(self, parsedQuery):
+        """
+        Using the parsedQuery data, intersects the conditional filters amongs the reviews.
+        Until a filtered list of results is generated. 
+        >>> p3  = Phase3()
+
+        >>> parsedQuery = ([], [], [], [])
+        >>> p3.getReviews(parsedQuery)
+        []
+
+        >>> parsedQuery = ([], [], [], [])
+        >>> p3.getReviews(parsedQuery)
+        []
+
+        """
+        list = []
+
+        #Select by selections, selector = (selector, searchTerm)
+        for entry in parsedQuery[2]:
+            pass
+
+        #Select by words, word = (searchTerm)
+        for entry in parsedQuery[0]:
+            pass
+
+        #Select by wilds, wild = (searchTerm) 
+        for entry in parsedQuery[1]:
+            pass
+
+        #Select by comparator, comparator = (comparator, operator, value)
+        for entry in parsedQuery[3]:
+            pass
+
+
+        return list
 
 
 
