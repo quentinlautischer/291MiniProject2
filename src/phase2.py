@@ -1,7 +1,7 @@
 import subprocess
-from b_bsddb3 import *
 from bsddb3 import db
 from TimeWrapper import timed
+from phase3 import *
 #call(["ls", "-l"])
 
 class Phase2:
@@ -12,6 +12,7 @@ class Phase2:
     sortFiles = [pterms, rterms, scores]
 
     def __init__(self):
+        pass
         try:
             subprocess.check_output("rm -rf rw.idx", stderr=subprocess.STDOUT, shell=True)
         except:

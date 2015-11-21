@@ -20,9 +20,9 @@
 
 import re
 import time
-from b_bsddb3 import *
 from IndexDB import *
 from rgxHandler import *
+
 class Phase3:
     reviewsDB = None
     ptermsDB = None
@@ -39,7 +39,7 @@ class Phase3:
         print("#############    RUNNING PHASE 3   #############")
         print("############# REVIEW LOOKUP SYSTEM #############")
         # while(1):
-        query = input("Please provide a Query: ")
+        query = raw_input("Please provide a Query: ")
         parsedQuery = self.queryParser(query) 
         print(parsedQuery)
         listOfReviews = self.getReviews(parsedQuery)
@@ -62,6 +62,7 @@ class Phase3:
 
 
 
+
     def getReviews(self, parsedQuery):
         """
         Using the parsedQuery data, intersects the conditional filters amongs the reviews.
@@ -81,8 +82,17 @@ class Phase3:
 
         #Select by selections, selector = (selector, searchTerm)
         for entry in parsedQuery[2]:
-            pass
+            print(entry)
+            selector = entry[0]
+            term = entry[1]
 
+
+            if(selector == "r"):
+                subList = self.rtermsDB.get(term)
+                print(subList)
+                for i in subList:
+                    list.append(i)
+            
         #Select by words, word = (searchTerm)
         for entry in parsedQuery[0]:
             pass
@@ -217,14 +227,7 @@ class Phase3:
 
 
 if __name__ == "__main__":
-
+    import doctest
+    doctest.testmod()
     p3 = Phase3()
-    review = ['B000179R3I,\"Amazon.com: Austin Reed Dartmouth Jacket In Basics, Misses: Clothing\",unknown,A3Q0VJTUO4EZ56,\"Jeanmarie Kabala &quot;JP Kabala&quot;\",7/7,4.0,1182816000,\"Periwinkle Dartmouth Blazer\",\"I own the Austin Reed dartmouth blazer in every color in which they make it-- it is a staple of my business wardrobe. Well made, quality fabric, nicely tailored, classic lines, appropriate for a professional woman. (something that can be hard to find at times) It should be noted, however, that the periwinkle and raspberry colors are lovely, but the fabric and buttons are slightly different than the &quot;classic&quot; colors(lighter) and the linings and interfacings are not as substantial as the brown, navy, camel, red and ivory. It\'s still a good value, particularly as these are colors appropriate to warmer seasons and climates, but I was a bit surprised."']
-    p3.displayReviews(review)
-
-
-
-    #import doctest
-    #doctest.testmod()
-    p3 = Phase3()
-    #p3.start()
+    p3.start()
