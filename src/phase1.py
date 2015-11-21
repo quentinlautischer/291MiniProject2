@@ -1,13 +1,14 @@
 from rgxHandler import *
-#from TimeWrapper import timed
+from TimeWrapper import timed
 
 class Phase1:
 
     def __init__(self, filename):
         self.filename = filename
         self.lines = self.parseFile()
-    
+    @timed
     def parseFile(self):
+        print("####### RUNNING PHASE 1 PARSING FILES #######")
         rgx = rgxHandler()
 
         f = open(self.filename)
@@ -32,12 +33,10 @@ class Phase1:
                 k+=1
             i+=1
         return linesout
-    
+    @timed
     def start(self):
-        print("####### RUNNING PHASE 1 PARSING FILES #######")
-        print("")
         self.createFiles()
-
+    @timed
     def createFiles(self):
         review = ""
         self.clearFiles()

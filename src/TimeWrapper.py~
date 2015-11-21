@@ -6,7 +6,8 @@ def timed(f):
   def wrapper(*args, **kwds):
     start = time()
     result = f(*args, **kwds)
-    elapsed = time() - start
-    print "%s took %d time to finish"  (f.__name__, elapsed)
+    elapsed = (time() - start)
+    elapsed = float("{0:.2f}".format(elapsed))
+    print(f.__name__ + " took " + str(elapsed) + " ms to finish")
     return result
   return wrapper

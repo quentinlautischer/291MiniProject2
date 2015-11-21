@@ -22,6 +22,7 @@ import re
 import time
 from b_bsddb3 import *
 from IndexDB import *
+from rgxHandler import *
 class Phase3:
     reviewsDB = None
     ptermsDB = None
@@ -50,11 +51,15 @@ class Phase3:
         self.scoresDB.close()
 
     def displayReviews(self, listOfReviews):
-        """
+        rgx = rgxHandler()
+        i = 0
+        for review in listOfReviews:
+            review = rgx.putLineTitlesBack(review)
+            print("###  REVIEW # " + str(i) +  " ###" + '\n')
+            for line in review:
+                print(line, end='')
+            print('\n')
 
-        """
-        print("Here is the Result")
-        print("")
 
 
     def getReviews(self, parsedQuery):
@@ -212,7 +217,14 @@ class Phase3:
 
 
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
+
     p3 = Phase3()
-    p3.start()
+    review = ['B000179R3I,\"Amazon.com: Austin Reed Dartmouth Jacket In Basics, Misses: Clothing\",unknown,A3Q0VJTUO4EZ56,\"Jeanmarie Kabala &quot;JP Kabala&quot;\",7/7,4.0,1182816000,\"Periwinkle Dartmouth Blazer\",\"I own the Austin Reed dartmouth blazer in every color in which they make it-- it is a staple of my business wardrobe. Well made, quality fabric, nicely tailored, classic lines, appropriate for a professional woman. (something that can be hard to find at times) It should be noted, however, that the periwinkle and raspberry colors are lovely, but the fabric and buttons are slightly different than the &quot;classic&quot; colors(lighter) and the linings and interfacings are not as substantial as the brown, navy, camel, red and ivory. It\'s still a good value, particularly as these are colors appropriate to warmer seasons and climates, but I was a bit surprised."']
+    p3.displayReviews(review)
+
+
+
+    #import doctest
+    #doctest.testmod()
+    p3 = Phase3()
+    #p3.start()

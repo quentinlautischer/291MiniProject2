@@ -1,6 +1,7 @@
 import subprocess
 from b_bsddb3 import *
 from bsddb3 import db
+from TimeWrapper import timed
 #call(["ls", "-l"])
 
 class Phase2:
@@ -27,7 +28,7 @@ class Phase2:
             subprocess.check_output("rm -rf sc.idx", stderr=subprocess.STDOUT, shell=True)
         except:
             print("Issue cleaning up. DONT BE A FOOL.")
-
+    @timed
     def start(self):
         print("####### RUNNING PHASE 2 CREATING INDEXES #######")
         print("")
@@ -40,11 +41,11 @@ class Phase2:
         
         self.updateFileStructure(self.reviews[0])
         subprocess.check_output("db_load -T -t hash -f " + self.reviews[0] + " " + self.reviews[1], stderr=subprocess.STDOUT, shell=True)
-
+    @timed
     def updateFileStructure(self, filename):
         lines = self.parseFile(filename)
         self.overWrite(filename, lines)
-    
+    @timed
     def parseFile(self, filename):
         f = open(filename)
         linesout = []
@@ -55,7 +56,7 @@ class Phase2:
             linesout.append(lineed[1])
         f.close()
         return linesout
-
+    @timed
     def overWrite(self, filename, lines):
         f = open(filename, 'w')
         for line in lines:
