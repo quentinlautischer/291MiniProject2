@@ -39,7 +39,7 @@ class Phase3:
         print("#############    RUNNING PHASE 3   #############")
         print("############# REVIEW LOOKUP SYSTEM #############")
         # while(1):
-        query = raw_input("Please provide a Query: ")
+        query = input("Please provide a Query: ")
         parsedQuery = self.queryParser(query) 
         print(parsedQuery)
         listOfReviews = self.getReviews(parsedQuery)
