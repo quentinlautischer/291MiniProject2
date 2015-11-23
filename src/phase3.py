@@ -22,6 +22,8 @@ import re
 import time
 from IndexDB import *
 from rgxHandler import *
+from datetime import *
+import operator
 
 class Phase3:
     reviewsDB = None
@@ -29,11 +31,15 @@ class Phase3:
     rtermsDB = None
     scoresDB = None
 
+    rgx = None
+
     def __init__(self):
         self.reviewsDB = IndexDB('rw.idx') 
         self.ptermsDB = IndexDB('pt.idx')
         self.rtermsDB = IndexDB('rt.idx')
         self.scoresDB = IndexDB('sc.idx')
+
+        self.rgx = rgxHandler()
 
     def start(self):
         print("#############    RUNNING PHASE 3   #############")
@@ -43,7 +49,7 @@ class Phase3:
         parsedQuery = self.queryParser(query) 
         # print(parsedQuery)
         listOfReviews = self.getReviews(parsedQuery)
-        print(listOfReviews)
+        # print(listOfReviews)
         self.displayReviews(listOfReviews)
 
         self.reviewsDB.close()
@@ -52,16 +58,24 @@ class Phase3:
         self.scoresDB.close()
 
     def displayReviews(self, listOfReviews):
-        rgx = rgxHandler()
+        
         i = 0
         for reviewKey in listOfReviews:
-            reviewValue = self.reviewsDB.get(reviewKey)
-            print(reviewValue)
-            reviewValue = rgx.putLineTitlesBack(reviewValue)
+            i += 1
+            reviewValue = self.reviewsDB.get(reviewKey)[0]
+            # print(reviewValue)
+            reviewValue = self.rgx.putLineTitlesBack(reviewValue)
             print("###  REVIEW # " + str(i) +  " ###" + '\n')
             for line in reviewValue:
-                print(line, end='')
+                if( "review/time" in line):
+                    time =   datetime.fromtimestamp(float(line.split(":")[1].strip("\n").strip()))
+                    print("review/time: ", end='')
+                    print(time.strftime("%b %d %Y"))
+                    print()
+                else:
+                    print(line, end='')
             print('\n')
+
 
 
 
@@ -100,7 +114,14 @@ class Phase3:
         >>> p3.getReviews(parsedQuery)
         ['8', '10']
 
-        
+        >>> parsedQuery = ([], [], [], [('rdate', '<', '2000/01/01')])
+        >>> p3.getReviews(parsedQuery)
+        ['4', '5']
+
+        >>> parsedQuery = ([], [], [], [('rdate', '<', '2000/01/01'), ('pprice', '<', '17')])
+        >>> p3.getReviews(parsedQuery)
+        ['5']
+
 
         """
         reviewList = []
@@ -150,8 +171,52 @@ class Phase3:
             tmpList = []
 
         #Select by comparator, comparator = (comparator, operator, value)
+        #pprice < 20
+        #rdate > 2007/06/20 
+        #rscore < 3 
+        #product/price: unknown
+        #review/score: 5.0
+        #review/time: 1075939200
+
+
         for entry in parsedQuery[3]:
-            pass
+
+            comparator = entry[0]
+            oper = entry[1]
+            value = entry[2]
+
+            ops = {"<": operator.lt, ">": operator.gt}
+
+            if(comparator == "rdate"): 
+                comparator = "rtime"
+                year,month,day = value.split("/")
+                try:
+                    value = datetime(int(year), int(month), int(day))
+                except:
+                    print("Invalid Date Provided. No Results Found.")
+                    return []
+
+            keys = self.reviewsDB.getAllReviewKeys()
+            for key in keys:
+                item = self.rgx.putLineTitlesBack( self.reviewsDB.get(key)[0] )
+
+                itemPrice = item[2].split(":")[1].strip("\n").strip()
+                itemScore = item[6].split(":")[1].strip("\n").strip()
+                itemDate = datetime.fromtimestamp( float(item[7].split(":")[1].strip("\n").strip() ))
+                
+                # print(itemPrice)
+                # print(itemScore)
+                # print(itemDate)
+                # print("")
+
+                comp_to_val = {"pprice": itemPrice, "rscore": itemScore, "rtime": itemDate }
+
+                if ops[oper](comp_to_val[comparator], value) :
+                    tmpList.append(key)
+
+            reviewList = self.ourIntersect(reviewList, tmpList)
+            tmpList = []
+
 
         # print(reviewList)
         return sorted(reviewList, key=float)
