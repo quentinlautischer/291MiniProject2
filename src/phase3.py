@@ -41,8 +41,9 @@ class Phase3:
         # while(1):
         query = input("Please provide a Query: ")
         parsedQuery = self.queryParser(query) 
-        print(parsedQuery)
+        # print(parsedQuery)
         listOfReviews = self.getReviews(parsedQuery)
+        print(listOfReviews)
         self.displayReviews(listOfReviews)
 
         self.reviewsDB.close()
@@ -53,10 +54,12 @@ class Phase3:
     def displayReviews(self, listOfReviews):
         rgx = rgxHandler()
         i = 0
-        for review in listOfReviews:
-            review = rgx.putLineTitlesBack(review)
+        for reviewKey in listOfReviews:
+            reviewValue = self.reviewsDB.get(reviewKey)
+            print(reviewValue)
+            reviewValue = rgx.putLineTitlesBack(reviewValue)
             print("###  REVIEW # " + str(i) +  " ###" + '\n')
-            for line in review:
+            for line in reviewValue:
                 print(line, end='')
             print('\n')
 
@@ -73,42 +76,91 @@ class Phase3:
         >>> p3.getReviews(parsedQuery)
         []
 
-        >>> parsedQuery = ([], [], [], [])
+        >>> parsedQuery = ([], [], [('r', 'ago')], [])
         >>> p3.getReviews(parsedQuery)
-        []
+        ['9']
+
+        >>> parsedQuery = (['ago'], [], [], [])
+        >>> p3.getReviews(parsedQuery)
+        ['9']
+
+        >>> parsedQuery = (['again'], [], [], [])
+        >>> p3.getReviews(parsedQuery)
+        ['8', '10']
+
+        >>> parsedQuery = (['again', 'used'], [], [], [])
+        >>> p3.getReviews(parsedQuery)
+        ['10']
+
+        >>> parsedQuery = ([], ['ag'], [], [])
+        >>> p3.getReviews(parsedQuery)
+        ['8', '9', '10']
+
+        >>> parsedQuery = (['again'], ['ag'], [], [])
+        >>> p3.getReviews(parsedQuery)
+        ['8', '10']
+
+        
 
         """
-        list = []
+        reviewList = []
+        tmpList = []
 
         #Select by selections, selector = (selector, searchTerm)
         for entry in parsedQuery[2]:
-            print(entry)
             selector = entry[0]
             term = entry[1]
 
-
             if(selector == "r"):
                 subList = self.rtermsDB.get(term)
-                print(subList)
                 for i in subList:
-                    list.append(i)
+                    tmpList.append(i)
+            elif(selector == "p"):
+                subList = self.ptermsDB.get(term)
+                for i in subList:
+                    tmpList.append(i)
+            reviewList = self.ourIntersect(reviewList, tmpList)
+            tmpList = []
+
             
         #Select by words, word = (searchTerm)
         for entry in parsedQuery[0]:
-            pass
+            subList = self.rtermsDB.get(entry)
+            for i in subList:
+                tmpList.append(i)
+
+            subList = self.ptermsDB.get(entry)
+            for i in subList:
+                tmpList.append(i)
+
+            reviewList = self.ourIntersect(reviewList, tmpList)
+            tmpList = []
 
         #Select by wilds, wild = (searchTerm) 
         for entry in parsedQuery[1]:
-            pass
+            subList = self.rtermsDB.getWild(entry)
+            for i in subList:
+                tmpList.append(i)
+
+            subList = self.ptermsDB.getWild(entry)
+            for i in subList:
+                tmpList.append(i)
+
+            reviewList = self.ourIntersect(reviewList, tmpList)
+            tmpList = []
 
         #Select by comparator, comparator = (comparator, operator, value)
         for entry in parsedQuery[3]:
             pass
 
+        # print(reviewList)
+        return sorted(reviewList, key=float)
 
-        return list
-
-
+    def ourIntersect(self, b1, b2):
+        if(b1 == []):
+            return list(set(b2))
+        else:
+            return list(set(b1).intersection(b2))
 
     def queryParser(self, query):
         """

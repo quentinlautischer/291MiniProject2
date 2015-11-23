@@ -63,6 +63,40 @@ class IndexDB:
 
         return list
 
+    def getWild(self, key):
+        """
+
+        >>> p1 = Phase1("sample10.txt")
+        >>> p1.start()
+        ####### RUNNING PHASE 1 PARSING FILES #######
+        <BLANKLINE>
+        >>> p2 = Phase2()
+        >>> p2.start()
+        ####### RUNNING PHASE 2 CREATING INDEXES #######
+        <BLANKLINE>
+
+        >>> indexRW = IndexDB('pt.idx')
+
+        >>> indexRW.getWild("ag%")
+        ['8', '9', '10']
+
+        """
+        wildRE = re.compile(r''+key+'[a-z]*')
+
+        key = str.encode(key)
+        list = []
+        cur = self.database.cursor()
+
+        val = cur.first()
+        while val:
+            in_key = str(val[0],'ascii')
+            in_val = str(val[1],'ascii')
+            if re.match(wildRE, in_key):
+                list.append(in_val)
+            val = cur.next()
+
+        return list
+
     def insert(self,key, value):
         if self.database.has_key(key)== False:
             self.database[key] = value
