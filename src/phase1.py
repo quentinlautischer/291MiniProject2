@@ -48,7 +48,8 @@ class Phase1:
         k = 1
 
         for line in self.lines:
-            review += line
+            # review += line
+            reviews.write(line)
             if i == 2:
                 self.writeToFile3(line, outputp, k) #Write P terms
             elif i == 7:
@@ -57,14 +58,15 @@ class Phase1:
                 self.writeToFile3(line, outputr, k) #Writing R terms
             elif i == 10:
                 self.writeToFile3(line, outputr, k) #Writing R terms
-                review += '\n'
+                # review += '\n'
+                reviews.write('\n')
                 i = -1
                 k += 1
             else:
                 pass
             
             i += 1
-        reviews.write(review) #Write review
+        # reviews.write(review) #Write review
 
         self.closeFiles([reviews, outputp, outputr, outputs])
 
