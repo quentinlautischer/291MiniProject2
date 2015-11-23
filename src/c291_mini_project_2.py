@@ -4,13 +4,13 @@ from phase3 import *
 
 p1 = Phase1("sample10.txt")
 p2 = Phase2()
-#p3 = Phase3()
+p3 = Phase3()
 
 
 
 p1.start()
 p2.start()
-#p3.start()
+p3.start()
 
 
 

@@ -34,28 +34,34 @@ class Phase3:
     rgx = None
 
     def __init__(self):
+        self.rgx = rgxHandler()
+
+    def start(self):
+        print("############# PHASE 3 INITIALIZING QUERY #############")
+        print("")
+
+        print("#############    REVIEW LOOKUP SYSTEM    #############")
         self.reviewsDB = IndexDB('rw.idx') 
         self.ptermsDB = IndexDB('pt.idx')
         self.rtermsDB = IndexDB('rt.idx')
         self.scoresDB = IndexDB('sc.idx')
 
-        self.rgx = rgxHandler()
 
-    def start(self):
-        print("#############    RUNNING PHASE 3   #############")
-        print("############# REVIEW LOOKUP SYSTEM #############")
-        # while(1):
-        query = input("Please provide a Query: ")
-        parsedQuery = self.queryParser(query) 
-        # print(parsedQuery)
-        listOfReviews = self.getReviews(parsedQuery)
-        # print(listOfReviews)
-        self.displayReviews(listOfReviews)
-
-        self.reviewsDB.close()
-        self.ptermsDB.close()
-        self.rtermsDB.close()
-        self.scoresDB.close()
+        print("Type 'q!' to exit")
+        while(1):
+            query = input("Please provide a Query: ")
+            print("")
+            if query == "q!":
+                self.reviewsDB.close()
+                self.ptermsDB.close()
+                self.rtermsDB.close()
+                self.scoresDB.close()
+                exit()
+            parsedQuery = self.queryParser(query) 
+            # print(parsedQuery)
+            listOfReviews = self.getReviews(parsedQuery)
+            # print(listOfReviews)
+            self.displayReviews(listOfReviews)
 
     def displayReviews(self, listOfReviews):
         
