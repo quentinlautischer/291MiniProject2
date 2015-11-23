@@ -32,6 +32,7 @@ class Phase3:
     scoresDB = None
 
     rgx = None
+    firstIntersectFlag = False
 
     def __init__(self):
         self.rgx = rgxHandler()
@@ -49,9 +50,9 @@ class Phase3:
         self.ptermsDB = IndexDB('pt.idx')
         self.rtermsDB = IndexDB('rt.idx')
         self.scoresDB = IndexDB('sc.idx')
-
-
         print("Type 'q!' to exit")
+
+    def main(self):
         while(1):
             query = input("Please provide a Query: ")
             print("")
@@ -61,10 +62,11 @@ class Phase3:
                 self.rtermsDB.close()
                 self.scoresDB.close()
                 exit()
+
             parsedQuery = self.queryParser(query) 
             # print(parsedQuery)
             listOfReviews = self.getReviews(parsedQuery)
-            print(listOfReviews)
+            # print(listOfReviews)
             self.displayReviews(listOfReviews)
 
     def displayReviews(self, listOfReviews):
@@ -96,6 +98,17 @@ class Phase3:
         Using the parsedQuery data, intersects the conditional filters amongs the reviews.
         Until a filtered list of results is generated. 
         >>> p3  = Phase3()
+        >>> p3.start()
+        ######################################################
+        ############# PHASE 3 INITIALIZING QUERY #############
+        ######################################################
+        <BLANKLINE>
+        ######################################################
+        #############    REVIEW LOOKUP SYSTEM    #############
+        ######################################################
+        <BLANKLINE>
+        Type 'q!' to exit
+
 
         >>> parsedQuery = ([], [], [], [])
         >>> p3.getReviews(parsedQuery)
@@ -134,7 +147,70 @@ class Phase3:
         ['5']
 
 
+        >>> parsedQuery = (['cross'], [], [], [])
+        >>> p3.getReviews(parsedQuery)
+        ['5', '7', '8', '9', '10']
+
+        >>> parsedQuery = ([], [], [('r', 'cross')], [])
+        >>> p3.getReviews(parsedQuery)
+        ['5', '7', '8', '10']
+
+        >>> parsedQuery = ([], [], [('p', 'cross')], [])
+        >>> p3.getReviews(parsedQuery)
+        ['7', '8', '9', '10']
+
+
+        >>> parsedQuery = ([], ['not'], [], [])
+        >>> p3.getReviews(parsedQuery)
+        ['1', '2', '8', '9']
+
+        >>> parsedQuery = ([], ['not'], [('r', 'cross')], [])
+        >>> p3.getReviews(parsedQuery)
+        ['8']
+
+        >>> parsedQuery = ([], [], [], [('rscore', '<', '5')])
+        >>> p3.getReviews(parsedQuery)
+        ['1', '3', '4']
+
+        >>> parsedQuery = ([], [], [], [('rscore', '>', '4')])
+        >>> p3.getReviews(parsedQuery)
+        ['2', '5', '6', '7', '8', '9', '10']
+
+        >>> parsedQuery = (['find'], [], [], [('rscore', '<', '5')])
+        >>> p3.getReviews(parsedQuery)
+        ['1', '4']
+
+        >>> parsedQuery = ([], [], [], [('pprice', '<', '16')])
+        >>> p3.getReviews(parsedQuery)
+        ['5', '6']
+
+        >>> parsedQuery = (['old'], [], [], [('pprice', '<', '16')])
+        >>> p3.getReviews(parsedQuery)
+        ['6']
+
+        >>> parsedQuery = ([], [], [], [('rdate', '<', '2000/01/01')])
+        >>> p3.getReviews(parsedQuery)
+        ['4', '5']
+
+        >>> parsedQuery = (['find'], [], [], [('rdate', '<', '2000/01/01')])
+        >>> p3.getReviews(parsedQuery)
+        ['4']
+
+        >>> parsedQuery = ([], [], [], [('rdate', '>', '2000/01/01')])
+        >>> p3.getReviews(parsedQuery)
+        ['1', '2', '3', '6', '7', '8', '9', '10']
+
+        >>> parsedQuery = ([], [], [], [('rdate', '>', '2009/01/01'), ('pprice', '>', '16'), ('pprice', '<', '18')])
+        >>> p3.getReviews(parsedQuery)
+        ['2']
+
+        >>> parsedQuery = (['shazam'], [], [], [('rdate', '>', '2009/01/01'), ('pprice', '>', '16'), ('pprice', '<', '18')])
+        >>> p3.getReviews(parsedQuery)
+        []
+
+
         """
+        self.firstIntersectFlag = False
         reviewList = []
         tmpList = []
 
@@ -206,6 +282,8 @@ class Phase3:
                 except:
                     print("Invalid Date Provided. No Results Found.")
                     return []
+            else:
+                value = value + ".0"
 
             keys = self.reviewsDB.getAllReviewKeys()
             for key in keys:
@@ -233,7 +311,8 @@ class Phase3:
         return sorted(reviewList, key=float)
 
     def ourIntersect(self, b1, b2):
-        if(b1 == []):
+        if(not self.firstIntersectFlag):
+            self.firstIntersectFlag = True
             return list(set(b2))
         else:
             return list(set(b1).intersection(b2))
@@ -248,8 +327,7 @@ class Phase3:
         selector = (selector, searchTerm)
         comparator = (comparator, operator, value)
 
-
-        >>> p3  = Phase3()
+        >>> p3 = Phase3()
         
         >>> p3.queryParser("")
         ([], [], [], [])
@@ -359,3 +437,4 @@ if __name__ == "__main__":
     doctest.testmod()
     p3 = Phase3()
     p3.start()
+    p3.main()
