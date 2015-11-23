@@ -1,6 +1,7 @@
-from phase1 import *
-from phase2 import *
-from phase3 import *
+import phase1
+import phase2
+import phase3 
+
 import os
 import sys
 
@@ -13,9 +14,9 @@ while(not os.path.exists(inputfile)):
 
 # p1 = Phase1("sample10.txt")
 
-p1 = Phase1(inputfile)
-p2 = Phase2()
-p3 = Phase3()
+p1 = phase1.Phase1(inputfile)
+p2 = phase2.Phase2()
+p3 = phase3.Phase3()
 
 
 
