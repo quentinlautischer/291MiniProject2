@@ -8,7 +8,9 @@ class Phase1:
         self.lines = self.parseFile()
     @timed
     def parseFile(self):
+        print("######################################################")
         print("#############   PHASE 1 PARSING FILES    #############")
+        print("######################################################" + '\n')
         rgx = rgxHandler()
 
         f = open(self.filename)

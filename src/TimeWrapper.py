@@ -8,6 +8,6 @@ def timed(f):
     result = f(*args, **kwds)
     elapsed = ((time() - start)) * 1000
     elapsed = float("{0:.2f}".format(elapsed))
-    #print(f.__name__ + " took " + str(elapsed) + " ms to finish")
+    print(f.__name__ + " took " + str(elapsed) + " ms to finish")
     return result
   return wrapper

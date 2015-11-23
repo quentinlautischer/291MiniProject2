@@ -37,10 +37,14 @@ class Phase3:
         self.rgx = rgxHandler()
 
     def start(self):
+        print("######################################################")
         print("############# PHASE 3 INITIALIZING QUERY #############")
-        print("")
+        print("######################################################" + '\n')
 
+        print("######################################################")
         print("#############    REVIEW LOOKUP SYSTEM    #############")
+        #print("#############      "  + "Type 'q!' to quit"   +  "     #############")
+        print("######################################################" + '\n')
         self.reviewsDB = IndexDB('rw.idx') 
         self.ptermsDB = IndexDB('pt.idx')
         self.rtermsDB = IndexDB('rt.idx')
@@ -60,7 +64,7 @@ class Phase3:
             parsedQuery = self.queryParser(query) 
             # print(parsedQuery)
             listOfReviews = self.getReviews(parsedQuery)
-            # print(listOfReviews)
+            print(listOfReviews)
             self.displayReviews(listOfReviews)
 
     def displayReviews(self, listOfReviews):
@@ -69,15 +73,16 @@ class Phase3:
         for reviewKey in listOfReviews:
             i += 1
             reviewValue = self.reviewsDB.get(reviewKey)[0]
-            # print(reviewValue)
+            #print(reviewValue)
+            print("######################################################")
+            print("#################      REVIEW " + str(i) +  "     #################")
+            print("######################################################" + '\n')
             reviewValue = self.rgx.putLineTitlesBack(reviewValue)
-            print("###  REVIEW # " + str(i) +  " ###" + '\n')
             for line in reviewValue:
                 if( "review/time" in line):
                     time =   datetime.fromtimestamp(float(line.split(":")[1].strip("\n").strip()))
-                    print("review/time: ", end='')
-                    print(time.strftime("%b %d %Y"))
-                    print()
+                    print("review/time: " + time.strftime("%b %d %Y")+ "\n")
+
                 else:
                     print(line, end='')
             print('\n')

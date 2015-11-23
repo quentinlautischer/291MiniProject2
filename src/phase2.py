@@ -31,7 +31,9 @@ class Phase2:
             print("Issue cleaning up. DONT BE A FOOL.")
     @timed
     def start(self):
+        print("######################################################")
         print("#############  PHASE 2 CREATING INDEXES  #############")
+        print("######################################################" + '\n')
         for filename, idx in self.sortFiles:
             subprocess.check_output("sort -u -o " + filename + " " + filename, stderr=subprocess.STDOUT, shell=True)
             

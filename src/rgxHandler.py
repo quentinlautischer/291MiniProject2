@@ -45,19 +45,25 @@ class rgxHandler:
         
         q = 0
         c = 0
-
+        i = 0
         while(True):
+            #print(str(i))
+            #print("c: " + str(c)  + "/" + str(len(commas)) + "   " + str(commas[c]))
+            #print("q: " + str(q) + "/" + str(len(quotes)) + "   " + str(quotes[q]))
 
-            if commas[c] < quotes[q]:
+            if commas[c] < quotes[q] and ((c+1) < len(commas)):
                 if c == 0:
+                    #print(review[0:commas[c]] + '\n')
                     rtnlines.append(review[0:commas[c]] + '\n')
                 else:
                     if quotes[q-1] > commas[c-1]:
                         pass
                     else:
+                        #print(review[commas[c-1]+1:commas[c]] + '\n')
                         rtnlines.append(review[commas[c-1]+1:commas[c]] + '\n')
                 c += 1
-            elif commas[c] > quotes[q] and commas[c] < quotes[q+1]:
+            elif (commas[c] > quotes[q] and commas[c] < quotes[q+1]) or ((c+1) == len(commas)):
+                #print(review[quotes[q]+1:quotes[q+1]] + '\n')
                 rtnlines.append(review[quotes[q]+1:quotes[q+1]] + '\n')
                 if q+1 == len(quotes)-1:
                     break
@@ -65,10 +71,12 @@ class rgxHandler:
                     c += 1
                 q+=2
             else:
+                #print(review[quotes[q]+1:quotes[q+1]] + '\n')
                 rtnlines.append(review[quotes[q]+1:quotes[q+1]] + '\n')
                 q+=2    
             if q == len(quotes):
                 break
+            i += 1    
          
         i = 0     
         for line in rtnlines:
